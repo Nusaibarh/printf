@@ -1,5 +1,1 @@
-# printf project
-
-Collaborators
-Abdurrahman Idris 
-Nusaiba Umar
+printf projectby Abdurrahman Idrees and Nusaiba Umar
