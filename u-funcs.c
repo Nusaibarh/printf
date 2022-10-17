@@ -1,106 +1,132 @@
 #include "main.h"
 
 /**
- * print_hex - prints unsigned hex numbers in lowercase
- * @ap: the argument pointer
+ * print_char - prints character
+ * @ap: argument pointer
  * @params: the parameters struct
  *
- * Return: bytes printed
+ * Return: number chars printed
  */
-int print_hex(va_list ap, params_t *params)
+int print_char(va_list ap, params_t *params)
 {
-	unsigned long l;
-	int c = 0;
-	char *str;
+	char pad_char = ' ';
+	unsigned int pad = 1, sum = 0, ch = va_arg(ap, int);
+
+	if (params->minus_flag)
+		sum += _putchar(ch);
+	while (pad++ < params->width)
+		sum += _putchar(pad_char);
+	if (!params->minus_flag)
+		sum += _putchar(ch);
+	return (sum);
+}
+
+/**
+ * print_int - prints integer
+ * @ap: argument pointer
+ * @params: the parameters struct
+ *
+ * Return: number chars printed
+ */
+int print_int(va_list ap, params_t *params)
+{
+	long l;
 
 	if (params->l_modifier)
-		l = (unsigned long)va_arg(ap, unsigned long);
+		l = va_arg(ap, long);
 	else if (params->h_modifier)
-		l = (unsigned short int)va_arg(ap, unsigned int);
+		l = (short int)va_arg(ap, int);
 	else
-		l = (unsigned int)va_arg(ap, unsigned int);
+		l = (int)va_arg(ap, int);
+	return (print_number(convert(l, 10, 0, params), params));
+}
 
-	str = convert(l, 16, CONVERT_UNSIGNED | CONVERT_LOWERCASE, params);
-	if (params->hashtag_flag && l)
+/**
+ * print_string - prints string
+ * @ap: argument pointer
+ * @params: the parameters struct
+ *
+ * Return: number chars printed
+ */
+int print_string(va_list ap, params_t *params)
+{
+	char *str = va_arg(ap, char *), pad_char = ' ';
+	unsigned int pad = 0, sum = 0, i = 0, j;
+
+	(void)params;
+	switch ((int)(!str))
+		case 1:
+			str = NULL_STRING;
+
+	j = pad = _strlen(str);
+	if (params->precision < pad)
+		j = pad = params->precision;
+
+	if (params->minus_flag)
 	{
-		*--str = 'x';
-		*--str = '0';
+		if (params->precision != UINT_MAX)
+			for (i = 0; i < pad; i++)
+				sum += _putchar(*str++);
+		else
+			sum += _puts(str);
 	}
-	params->unsign = 1;
-	return (c += print_number(str, params));
-}
-
-/**
- * print_HEX - prints unsigned hex numbers in uppercase
- * @ap: the argument pointer
- * @params: the parameters struct
- *
- * Return: bytes printed
- */
-int print_HEX(va_list ap, params_t *params)
-{
-	unsigned long l;
-	int c = 0;
-	char *str;
-
-	if (params->l_modifier)
-		l = (unsigned long)va_arg(ap, unsigned long);
-	else if (params->h_modifier)
-		l = (unsigned short int)va_arg(ap, unsigned int);
-	else
-		l = (unsigned int)va_arg(ap, unsigned int);
-
-	str = convert(l, 16, CONVERT_UNSIGNED, params);
-	if (params->hashtag_flag && l)
+	while (j++ < params->width)
+		sum += _putchar(pad_char);
+	if (!params->minus_flag)
 	{
-		*--str = 'X';
-		*--str = '0';
+		if (params->precision != UINT_MAX)
+			for (i = 0; i < pad; i++)
+				sum += _putchar(*str++);
+		else
+			sum += _puts(str);
 	}
-	params->unsign = 1;
-	return (c += print_number(str, params));
-}
-/**
- * print_binary - prints unsigned binary number
- * @ap: the argument pointer
- * @params: the parameters struct
- *
- * Return: bytes printed
- */
-int print_binary(va_list ap, params_t *params)
-{
-	unsigned int n = va_arg(ap, unsigned int);
-	char *str = convert(n, 2, CONVERT_UNSIGNED, params);
-	int c = 0;
-
-	if (params->hashtag_flag && n)
-		*--str = '0';
-	params->unsign = 1;
-	return (c += print_number(str, params));
+	return (sum);
 }
 
 /**
- * print_octal - prints unsigned octal numbers
- * @ap: the argument pointer
+ * print_percent - prints string
+ * @ap: argument pointer
  * @params: the parameters struct
  *
- * Return: bytes printed
+ * Return: number chars printed
  */
-int print_octal(va_list ap, params_t *params)
+int print_percent(va_list ap, params_t *params)
 {
-	unsigned long l;
-	char *str;
-	int c = 0;
+	(void)ap;
+	(void)params;
+	return (_putchar('%'));
+}
 
-	if (params->l_modifier)
-		l = (unsigned long)va_arg(ap, unsigned long);
-	else if (params->h_modifier)
-		l = (unsigned short int)va_arg(ap, unsigned int);
-	else
-		l = (unsigned int)va_arg(ap, unsigned int);
-	str = convert(l, 8, CONVERT_UNSIGNED, params);
+/**
+ * print_S - custom format specifier
+ * @ap: argument pointer
+ * @params: the parameters struct
+ *
+ * Return: number chars printed
+ */
+int print_S(va_list ap, params_t *params)
+{
+	char *str = va_arg(ap, char *);
+	char *hex;
+	int sum = 0;
 
-	if (params->hashtag_flag && l)
-		*--str = '0';
-	params->unsign = 1;
-	return (c += print_number(str, params));
+	if ((int)(!str))
+		return (_puts(NULL_STRING));
+	for (; *str; str++)
+	{
+		if ((*str > 0 && *str < 32) || *str >= 127)
+		{
+			sum += _putchar('\\');
+			sum += _putchar('x');
+			hex = convert(*str, 16, 0, params);
+			if (!hex[1])
+				sum += _putchar('0');
+			sum += _puts(hex);
+		}
+		else
+		{
+			sum += _putchar(*str);
+		}
+	}
+	return (sum);
 }
