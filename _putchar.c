@@ -22,8 +22,6 @@ int _putchar(int ch)
 	return (1);
 }
 
-#include "main.h"
-
 /**
  * _puts - prints a string with newline
  * @str: the string to print
