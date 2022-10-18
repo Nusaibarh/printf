@@ -7,7 +7,6 @@
  */
 
 int _printf(const char *format, ...)
-
 {
 	int sum = 0;
 	va_list ap;
@@ -33,7 +32,7 @@ int _printf(const char *format, ...)
 		p++;
 		while (get_flag(p, &params))
 		{
-			p++; 
+			p++;
 		}
 		p = get_width(p, &params, ap);
 		p = get_precision(p, &params, ap);
@@ -49,3 +48,4 @@ int _printf(const char *format, ...)
 	va_end(ap);
 	return (sum);
 }
+
