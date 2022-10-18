@@ -62,7 +62,7 @@ typedef struct specifier
 	int (*f)(va_list, params_t *);
 } specifier_t;
 
-/* _put.c module */
+/* _putchar.c module */
 int _puts(char *str);
 int _putchar(int ch);
 
