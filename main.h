@@ -17,25 +17,6 @@
 #define CONVERT_LOWERCASE	1
 #define CONVERT_UNSIGNED	2
 
-/**
- * struct parameters - parameters struct
- *
- * @unsign: flag if unsigned value
- *
- * @plus_flag: on if plus_flag specified
- * @space_flag: on if space_flag specified
- * @hashtag_flag: on if hashtag_flag specified
- * @zero_flag: on if zero_flag specified
- * @minus_flag: on if minus_flag specified
- *
- * @width: field width specified
- * @precision: field precision specified
- *
- * @h_modifier: on if h_modifier is specified
- * @l_modifier: on if l_modifier is specified
- *
- */
-
 typedef struct parameters
 {
 	unsigned int unsign			: 1;
@@ -50,12 +31,6 @@ typedef struct parameters
 	unsigned int l_modifier		: 1;
 } params_t;
 
-/**
- * struct specifier - struct token
- *
- * @specifier: format token
- * @f: The function associated
- */
 typedef struct specifier
 {
 	char *specifier;
